@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { AnimationProps, motion } from 'framer-motion';
 import { Box, BoxProps, Button, ButtonProps, Container, ContainerProps } from '@mui/material';
 import laugh from '../laugh.svg'
 
@@ -12,10 +12,12 @@ const animationStyle = {
 
 const xTranslation = [0, 50, 100, 150, 200, 200];
 
-const transitionStyle = {
-  duration: 2,
-  times: [0, 0.4, 0.8, 1.2, 1.6, 1],
+const transitionStyle: AnimationProps["transition"] = {
+  duration: 1,
   repeat: Infinity,
+  ease: "linear",
+  repeatType: "reverse",
+  type: "keyframes",
 }
 
 const variants = {
@@ -47,7 +49,7 @@ const boxStyle: BoxProps["sx"] = {
 }
 
 
-export const Animator: React.FC = () => {
+export const Transitioner: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
@@ -60,12 +62,20 @@ export const Animator: React.FC = () => {
         <Button  {...buttonProps} onClick={() => setIsOpen(isOpen => !isOpen)}>Poop</Button>
       </Box>
       <Box sx={{...boxStyle}} >
-        <motion.div
+        <motion.img
           animate={isOpen ? variants.open : variants.closed}
           transition={transitionStyle}
-        >
-          <img src={laugh} className="Basic-logo" alt="logo" />
-        </motion.div>
+          src={laugh} 
+          className="Basic-logo"
+          alt="logo"
+        />
+        <motion.img
+          animate={isOpen ? variants.open : variants.closed}
+          transition={{...transitionStyle, type:"keyframes"}}
+          src={laugh} 
+          className="Basic-logo"
+          alt="logo"
+        />
       </Box>
       <Box sx={{...boxStyle}} >
         <Button  {...buttonProps} onClick={() => setIsOpen(isOpen => !isOpen)}>Start</Button>
