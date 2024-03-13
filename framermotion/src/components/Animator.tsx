@@ -72,15 +72,6 @@ export const Animator: React.FC = () => {
   const [transitionStyle, setTransitionStyle] = useState(defaultTransitionStyle);
   const [showList, setShowList] = useState(false);
   const [animationList, setAnimationList] = useState<defaultAnimationList>(
-    // Object.keys(defaultElemState).map((key) => (
-    //   {
-    //     // [key as keyof typeof defaultElemState]:[defaultElemState[key as keyof typeof defaultElemState]]
-    //     [key as keyof typeof defaultElemState]:[]
-    //   }
-    // )).reduce(
-    //   (accumulator, currentval ) => ({...accumulator, ...currentval}),
-    //   {},
-    // ),
     {
       x: [],
       y: [],
@@ -93,35 +84,9 @@ export const Animator: React.FC = () => {
   const [transitionState, setTransitionState] = useState<AnimationProps["transition"]>(
     undefined
   );
-            // return Object.keys(prev).map((key) => (
-            // {
-            //   // [key as keyof typeof defaultElemState]:[defaultElemState[key as keyof typeof defaultElemState]]
-            //   [key as keyof defaultAnimationList]:
-            //     [...prev[key as keyof defaultAnimationList], 
-            //       animationState[key as keyof typeof defaultElemState]
-            //     ]
-            // }
-            // )).reduce(
-            //   (accumulator, currentval ) => ({...accumulator, ...currentval}),
-            //   {},
-            // );
-  // const setterFunc = (prev : defaultAnimationList, curr: typeof defaultElemState) => {
-  //   return Object.keys(prev).map((key) => (
-  //   {
-  //     // [key as keyof typeof defaultElemState]:[defaultElemState[key as keyof typeof defaultElemState]]
-  //     [key as keyof typeof prev]:[...prev[key as keyof typeof prev], curr[key as keyof typeof defaultElemState]]
-  //   }
-  //   )).reduce(
-  //     (accumulator, currentval ) => ({...accumulator, ...currentval}),
-  //     {},
-  //   )  
-  // };
-
 
   useEffect(
     () => console.log(""),
-    // () => console.log(transitionState),
-    // () => console.log(setterFunc(animationList, animationState)),
     [animationList, transitionState]
   );
   const sliderDefaults = {
@@ -132,12 +97,6 @@ export const Animator: React.FC = () => {
     rotateY: {min:0,max:180},
     rotateX: {min:0,max:180},
   }
-        // <Button  {...buttonProps} onClick={() => setIsOpen(isOpen => !isOpen)}>Poop</Button>
-        // <Slider onChange={(_,val,ind) => animationState.x.set(val typeof number ? val : val[ind])}>x</Slider>
-  //
-  // const handleChange = (event: Event, newValue: number | number[]) => {
-  //   setValue(newValue as number);
-  // };
 
   return (
     <>
