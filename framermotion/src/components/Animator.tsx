@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimationProps, useMotionValue } from 'framer-motion';
 import { Box, BoxProps, Button, ButtonProps, Container, ContainerProps, Slider, Typography } from '@mui/material';
 import laugh from '../laugh.svg'
+import { defaultAnimationList } from './datatypes';
+import { bouncy } from './presets';
 
 
 const buttonProps: ButtonProps = {
@@ -36,19 +38,19 @@ const defaultElemState = {
   rotateX: 0,
 }
 
-type defaultAnimationList = {
-  x: [number] | [],
-  y: [number] | [],
-  rotate: [number] | [],
-  scale: [number] | [],
-  rotateY: [number] | [],
-  rotateX: [number] | [],
+const emptyAnimationList: defaultAnimationList = {
+  x: [],
+  y: [],
+  rotate: [],
+  scale: [],
+  rotateY: [],
+  rotateX: [],
 }
 
 const defaultTransitionStyle : AnimationProps["transition"] = {
   duration: 0,
   repeat: Infinity,
-  repeatType: "reverse",
+  repeatType: "loop",
   delay: 0,
   // ease: "linear",
   // type: "spring",
@@ -71,16 +73,8 @@ export const Animator: React.FC = () => {
   const [animationState, setAnimationState] = useState(defaultElemState);
   const [transitionStyle, setTransitionStyle] = useState(defaultTransitionStyle);
   const [showList, setShowList] = useState(false);
-  const [animationList, setAnimationList] = useState<defaultAnimationList>(
-    {
-      x: [],
-      y: [],
-      rotate: [],
-      scale: [],
-      rotateY: [],
-      rotateX: [],
-    }
-  );
+  const [presetAnimation, setPresetAnimation] = useState(false);
+  const [animationList, setAnimationList] = useState<defaultAnimationList>(emptyAnimationList);
   const [transitionState, setTransitionState] = useState<AnimationProps["transition"]>(
     undefined
   );
@@ -101,7 +95,7 @@ export const Animator: React.FC = () => {
   return (
     <>
     <Container fixed sx={{...containerStyle}} maxWidth="xl" >
-      <Box sx={{...boxStyle}} >
+      <Box sx={{...boxStyle, width: "40%"}} >
         {Object.keys(animationState).map((key) => {
           return (
             <>
@@ -122,7 +116,7 @@ export const Animator: React.FC = () => {
           )
         })}
         <Box sx={{ display: "flex", justifyContent:"space-around", flexDirection: "row", height:"100%", width:"100%"}}>
-          <Button  {...buttonProps} onClick={() => {
+          <Button disabled={presetAnimation} {...buttonProps} onClick={() => {
               setTransitionStyle((prev) => {return {...prev, duration: prev.duration+0.1}});
               setAnimationList(
                 (prev) => { 
@@ -143,21 +137,35 @@ export const Animator: React.FC = () => {
               );
             }
           }>Add To Transition</Button>
-          <Button  {...buttonProps} onClick={() => setTransitionState((prev) => prev ? undefined : transitionStyle)} >Start Animation</Button>
-          <Button  {...buttonProps} onClick={() => setShowList((prev) => !prev)} >Toggle Property List</Button>
+          <Button disabled={presetAnimation} {...buttonProps} onClick={() => setTransitionState((prev) => prev ? undefined : transitionStyle)} >
+              Start Animation
+          </Button>
+          <Button {...buttonProps} onClick={() => setShowList((prev) => !prev)} >Toggle Property List</Button>
+          <Button {...buttonProps} onClick={() => {
+              if (!presetAnimation) {
+                setAnimationList(bouncy);
+                setTransitionState({...defaultTransitionStyle, duration: 2.5});
+                setTransitionStyle({...defaultTransitionStyle, duration: 2.5});
+              } else {
+                setAnimationList(emptyAnimationList);
+                setTransitionState(undefined);
+                setTransitionStyle(defaultTransitionStyle);
+              }
+              setPresetAnimation(!presetAnimation);
+            }} >Toggle Preset Animation</Button>
         </Box>
       </Box>
       <Box sx={{flex: "0 0 20px"}}/>
       <Box sx={{...boxStyle, backgroundColor:"black"}} >
         {transitionState && <motion.img
-          animate={animationList}
+          animate={{...animationList, y:animationList.y.map((val:number)=>val*-1)}}
           transition={transitionState}
           src={laugh}
           className="Basic-logo"
           alt="logo"
         />}
         {!transitionState && <motion.img
-          animate={animationState}
+          animate={{...animationState, y:animationState.y*-1}}
           src={laugh}
           className="Basic-logo"
           alt="logo"
